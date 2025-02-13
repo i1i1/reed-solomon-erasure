@@ -158,27 +158,19 @@ fn write_tables() {
     not(any(target_os = "android", target_os = "ios"))
 ))]
 fn compile_simd_c() {
-    fn guess_target_cpu() -> String {
-        // Copied and adapted from https://github.com/alexcrichton/proc-macro2/blob/4173a21dc497c67326095e438ff989cc63cd9279/build.rs#L115
-        // Licensed under Apache-2.0 + MIT (compatible because we're MIT)
-        let rustflags = env::var_os("RUSTFLAGS");
-        if let Some(rustflags) = rustflags {
-            for mut flag in rustflags.to_string_lossy().split(' ') {
-                if flag.starts_with("-C") {
-                    flag = &flag["-C".len()..];
-                }
-                if flag.starts_with("target-cpu=") {
-                    return flag["target-cpu=".len()..].to_owned()
-                }
-            }
-        }
+    let mut build = cc::Build::new();
+    build.opt_level(3);
 
-        "native".to_string()
+    let arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
+
+    match env::var_os("CARGO_ENCODED_ARCH") {
+        Some(arch) => drop(build.flag(&format!("-march={arch:?}"))),
+        // `-march=native` is not supported on aarch64
+        None if arch == "aarch64" => (),
+        None => drop(build.flag("-march=native")),
     }
 
-    cc::Build::new()
-        .opt_level(3)
-        .flag(&format!("-march={}", guess_target_cpu()))
+    build
         .flag("-std=c11")
         .file("simd_c/reedsolomon.c")
         .compile("reedsolomon");

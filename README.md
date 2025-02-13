@@ -32,7 +32,7 @@ reed-solomon-erasure = "4.0"
 or the following for the version which tries to utilise SIMD
 ```toml
 [dependencies]
-reed-solomon-erasure = { version = "4.0", features = "simd-accel" }
+reed-solomon-erasure = { version = "4.0", features = [ "simd-accel" ] }
 ```
 and the following to your crate root
 ```rust
@@ -55,7 +55,7 @@ fn main () {
         [0, 1,  2,  3],
         [4, 5,  6,  7],
         [8, 9, 10, 11],
-        [0, 0,  0,  0], // last 2 rows are parity hards
+        [0, 0,  0,  0], // last 2 rows are parity shards
         [0, 0,  0,  0]
     );
 
@@ -129,6 +129,9 @@ Many thanks to [@sakridge](https://github.com/sakridge) for adding support for A
 
 #### build.rs improvements
 Many thanks to [@ryoqun](https://github.com/ryoqun) for improving the usability of the library in the context of cross-compilation (see [PR #75](https://github.com/darrenldl/reed-solomon-erasure/pull/75))
+
+#### no_std support
+Many thanks to Nazar Mokrynskyi [@nazar-pc](https://github.com/nazar-pc) for adding `no_std` support (see [PR #90](https://github.com/darrenldl/reed-solomon-erasure/pull/90))
 
 #### Testers
 Many thanks to the following people for testing and benchmarking on various platforms

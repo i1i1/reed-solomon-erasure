@@ -1,3 +1,12 @@
+## 5.0.1
+- The `simd-accel` feature now builds on M1 Macs
+  - See [PR #92](https://github.com/rust-rse/reed-solomon-erasure/pull/92)
+- Minor code cleanup
+
+## 5.0.0
+- Merged several PRs
+- Not fully reviewed as I am no longer maintaining this crate
+
 ## 4.0.2
 - Updated build.rs to respect RUSTFLAGS's target-cpu if available
   - See [PR #75](https://github.com/darrenldl/reed-solomon-erasure/pull/75)
